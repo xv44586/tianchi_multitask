@@ -1,0 +1,4 @@
+toolkit4nlp>=0.5.0
+tensorflow==2.2.0
+#tensorflow-gpu==2.2.0
+keras==2.3.0
