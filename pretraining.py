@@ -270,7 +270,7 @@ if checkpoint_path is not None:
 
 train_model.summary()
 
-model_saved_path = './post_training/'
+model_saved_path = './post_training/nezha_base_wwm'
 
 
 class ModelCheckpoint(keras.callbacks.Callback):
