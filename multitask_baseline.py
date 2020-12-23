@@ -163,8 +163,9 @@ class SwitchLoss(Loss):
         return K.mean(train_loss)
 
 
-bert = build_transformer_model(checkpoint_path=checkpoint_path, config_path=config_path, model='nezha', with_pool=True)
-output = Dropout(0.1)(bert.output)
+bert = build_transformer_model(checkpoint_path=checkpoint_path, config_path=config_path, model='nezha')
+output = Lambda(lambda x: x[:,0])(bert.output)
+output = Dropout(0.1)(output)
 
 tnews_cls = Dense(units=len(tnews_labels), activation='softmax')(output)
 ocnli_cls = Dense(units=len(ocnli_labels), activation='softmax')(output)
