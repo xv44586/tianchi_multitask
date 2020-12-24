@@ -146,6 +146,11 @@ ocemotion_valid_generator = batch_data_generator(data=ocemotion_valid_data, batc
                                                  label_mask=ocemotion_mask)
 ocemotion_test_generator = batch_data_generator(data=ocemotion_test, batch_size=batch_size, label_mask=ocemotion_mask)
 
+train_batch_data = list(tnews_train_generator.__iter__(shuffle=True)) + list(
+    ocnli_train_generator.__iter__(shuffle=True))
+train_batch_data += list(ocemotion_train_generator.__iter__(shuffle=True))
+train_generator = data_generator(data=train_batch_data, batch_size=1)
+
 
 class SwitchLoss(Loss):
     """计算三种cls 的loss，然后通过 loss mask 过滤掉非当前任务的loss
@@ -164,7 +169,7 @@ class SwitchLoss(Loss):
 
 
 bert = build_transformer_model(checkpoint_path=checkpoint_path, config_path=config_path, model='nezha')
-output = Lambda(lambda x: x[:,0])(bert.output)
+output = Lambda(lambda x: x[:, 0])(bert.output)
 output = Dropout(0.1)(output)
 
 tnews_cls = Dense(units=len(tnews_labels), activation='softmax')(output)
@@ -259,12 +264,6 @@ class data_generator(DataGenerator):
     def __iter__(self, shuffle=False):
         for is_end, item in self.get_sample(shuffle):
             yield item
-
-
-train_batch_data = list(tnews_train_generator.__iter__(shuffle=True)) + list(
-    ocnli_train_generator.__iter__(shuffle=True))
-train_batch_data += list(ocemotion_train_generator.__iter__(shuffle=True))
-train_generator = data_generator(data=train_batch_data, batch_size=1)
 
 
 def predict_to_file(result_path):
