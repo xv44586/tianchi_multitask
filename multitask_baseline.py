@@ -149,6 +149,12 @@ ocemotion_test_generator = batch_data_generator(data=ocemotion_test, batch_size=
 train_batch_data = list(tnews_train_generator.__iter__(shuffle=True)) + list(
     ocnli_train_generator.__iter__(shuffle=True))
 train_batch_data += list(ocemotion_train_generator.__iter__(shuffle=True))
+
+class data_generator(DataGenerator):
+    def __iter__(self, shuffle=False):
+        for is_end, item in self.get_sample(shuffle):
+            yield item
+
 train_generator = data_generator(data=train_batch_data, batch_size=1)
 
 
@@ -260,10 +266,7 @@ class Evaluator(keras.callbacks.Callback):
         print('epoch: {} f1 is:{},  best f1 is:{}'.format(epoch + 1, avg_f1, self.best_f1))
 
 
-class data_generator(DataGenerator):
-    def __iter__(self, shuffle=False):
-        for is_end, item in self.get_sample(shuffle):
-            yield item
+
 
 
 def predict_to_file(result_path):
