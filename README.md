@@ -10,3 +10,6 @@
 # 思路
 思路也比较简单，三个任务共享同一个backbone，然后拼接各种的分类器，训练时交替训练三个分类器。
 更多的思路可以参考官方给的思路：[关于中文预训练模型泛化能力挑战赛的调研](https://tianchi.aliyun.com/forum/postDetail?spm=5176.12586969.1002.12.25a0249419u5hz&postId=145917)
+
+## adapt
+通过对不同任务构建不同的layerNorm 参数，来尝试“软分割”不同的任务，提高各个单任务的性能。[tnews_baseline-adapt](https://github.com/xv44586/tianchi_multitask/blob/master/tnews_baseline-adapt.ipynb)
